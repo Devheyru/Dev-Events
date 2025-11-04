@@ -108,7 +108,19 @@ const EventDetailspage = async ({
             <h2>About the Organizer</h2>
             <p>{event.organizer}</p>
           </section>
-          <EventTags tags={JSON.parse(event.tags[0])} />
+          <EventTags 
+            tags={
+              event.tags?.[0] 
+                ? (() => {
+                    try {
+                      return JSON.parse(event.tags[0]);
+                    } catch {
+                      return [];
+                    }
+                  })()
+                : []
+            } 
+          />
         </div>
         {/* Right side for Event booking */}
         <aside className="booking">
