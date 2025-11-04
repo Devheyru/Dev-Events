@@ -50,7 +50,16 @@ const EventDetailspage = async ({
   params: Promise<{ slug: string }>;
 }) => {
   const { slug } = await params;
-  const request = await fetch(`${BASE_URL}/api/events/${slug}`);
+  const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
+    next: { revalidate: 60 }, // Add caching strategy
+  });
+  
+  if (!request.ok) {
+    if (request.status === 404) {
+      return notFound();
+    }
+    throw new Error(`Failed to fetch event: ${request.status}`);
+  }
 
   const { event } = await request.json();
   if (!event) return notFound();
