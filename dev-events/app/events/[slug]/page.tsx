@@ -158,7 +158,7 @@ const EventDetailspage = async ({
           </div>
         </aside>
       </div>
-      <div className="flex w-full flex-col gao-4 pt-20">
+      <div className="flex w-full flex-col gap-4 pt-20">
         <h2>Similar Events</h2>
         <div className="events">
           {similarEvents.length > 0 &&
