@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 if (!BASE_URL) {
-  throw new Error('NEXT_PUBLIC_BASE_URL environment variable is not defined');
+  throw new Error("NEXT_PUBLIC_BASE_URL environment variable is not defined");
 }
 
 const bookings = 10;
@@ -60,7 +60,7 @@ const EventDetailspage = async ({
   const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
     next: { revalidate: 60 }, // Add caching strategy
   });
-  
+
   if (!request.ok) {
     if (request.status === 404) {
       return notFound();
@@ -129,9 +129,9 @@ const EventDetailspage = async ({
             <h2>About the Organizer</h2>
             <p>{event.organizer}</p>
           </section>
-          <EventTags 
+          <EventTags
             tags={
-              event.tags?.[0] 
+              event.tags?.[0]
                 ? (() => {
                     try {
                       return JSON.parse(event.tags[0]);
@@ -140,7 +140,7 @@ const EventDetailspage = async ({
                     }
                   })()
                 : []
-            } 
+            }
           />
         </div>
         {/* Right side for Event booking */}
@@ -154,7 +154,7 @@ const EventDetailspage = async ({
             ) : (
               <p className="text-sm">Be the first one to book your spot!</p>
             )}
-            <BookEvent />
+            <BookEvent eventId={event._id} slug={event.slug} />
           </div>
         </aside>
       </div>
