@@ -1,10 +1,12 @@
 import BookEvent from "@/components/BookEvent";
+import EventCard from "@/components/EventCard";
+import { IEvent } from "@/database";
+import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const bookings = 10;
 
 const EventDetailsItem = ({
   icon,
@@ -45,11 +47,19 @@ const EventDetailspage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
+  "use cache";
+  cacheLife("hours");
+
   const { slug } = await params;
   const request = await fetch(`${BASE_URL}/api/events/${slug}`);
 
   const { event } = await request.json();
   if (!event) return notFound();
+
+  const bookings = 10;
+  const similarEvents: IEvent[] = (await getSimilarEventsBySlug(
+    slug
+  )) as unknown as IEvent[];
 
   return (
     <section id="event">
@@ -99,12 +109,12 @@ const EventDetailspage = async ({
               label={event.audience}
             />
           </section>
-          <EventAgenda agendaItems={JSON.parse(event.agenda[0])} />
+          <EventAgenda agendaItems={event.agenda} />
           <section className="flex-col-gap-2">
             <h2>About the Organizer</h2>
             <p>{event.organizer}</p>
           </section>
-          <EventTags tags={JSON.parse(event.tags[0])} />
+          <EventTags tags={event.tags} />
         </div>
         {/* Right side for Event booking */}
         <aside className="booking">
@@ -120,6 +130,15 @@ const EventDetailspage = async ({
             <BookEvent />
           </div>
         </aside>
+      </div>
+      <div className="flex w-full flex-col gao-4 pt-20">
+        <h2>Similar Events</h2>
+        <div className="events">
+          {similarEvents.length > 0 &&
+            similarEvents.map((similarEvent: IEvent) => (
+              <EventCard key={similarEvent.title} {...similarEvent} />
+            ))}
+        </div>
       </div>
     </section>
   );
