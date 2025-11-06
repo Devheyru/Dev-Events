@@ -15,7 +15,7 @@ const BookEvent = ({ eventId, slug }: { eventId: string; slug: string }) => {
       setSubmitted(true);
       posthog.capture("event_booked", { eventId, slug, email });
     } else {
-      console.error("Booking creation failed");
+      alert("please enter a valid email address");
       posthog.captureException("Booking creation failed");
     }
   };

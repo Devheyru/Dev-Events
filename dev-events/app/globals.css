@@ -194,6 +194,11 @@
       }
     }
   }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) saturate(100%) invert(89%) sepia(7%) saturate(156%)
+      hue-rotate(177deg) brightness(96%) contrast(88%);
+    cursor: pointer;
+  }
 
   #event {
     .header {
@@ -249,6 +254,9 @@
 
   .pill {
     @apply bg-dark-100 text-light-100 text-xs rounded-[6px] px-5 py-2;
+  }
+  .create-event-inputs {
+    @apply bg-dark-200 rounded-[6px] px-5 py-2.5 w-full;
   }
 
   #book-event {

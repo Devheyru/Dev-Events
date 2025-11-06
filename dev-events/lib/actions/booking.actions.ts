@@ -28,3 +28,14 @@ export const creatBooking = async ({
     return { success: false };
   }
 };
+
+export const getBookingCount = async (eventId: string) => {
+  try {
+    await connectDB();
+    const count = await Booking.countDocuments({ eventId });
+    return count;
+  } catch (e) {
+    console.error("Error getting booking count:", e);
+    return 0;
+  }
+};

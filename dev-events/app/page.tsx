@@ -26,8 +26,8 @@ const page = async () => {
       <ExploreBtn />
 
       <div className="mt-20 space-y-7">
-        <h3>Featured Events</h3> {/* Events List */}
-        <ul className="events list-none">
+        <h3 id="events">Featured Events</h3> {/* Events List */}
+        <ul className="events list-none ">
           {events &&
             events.length > 0 &&
             events.map((event: IEvent, index: number) => (
