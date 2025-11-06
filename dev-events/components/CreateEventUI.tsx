@@ -168,12 +168,19 @@ export default function CreateEventUI(props: Props) {
               name="mode"
               value={props.form.mode}
               onChange={props.handleChange}
-              className="mt-1 create-event-inputs"
+              className={`mt-1 create-event-inputs ${
+                props.fieldErrors.mode ? "border-red-500" : "border-gray-300"
+              }`}
             >
               <option value="offline">Offline</option>
               <option value="online">Online</option>
               <option value="hybrid">Hybrid</option>
             </select>
+            {props.fieldErrors.mode && (
+              <p className="text-red-500 text-md mt-1">
+                {props.fieldErrors.mode}
+              </p>
+            )}
           </div>
         </div>
 
@@ -187,8 +194,15 @@ export default function CreateEventUI(props: Props) {
               placeholder="Event Audience"
               value={props.form.audience}
               onChange={props.handleChange}
-              className="mt-1 create-event-inputs"
+              className={`mt-1 create-event-inputs ${
+                props.fieldErrors.audience ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {props.fieldErrors.audience && (
+              <p className="text-red-500 text-md mt-1">
+                {props.fieldErrors.audience}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-md font-medium">Organizer</label>
@@ -199,8 +213,15 @@ export default function CreateEventUI(props: Props) {
               placeholder="Event Organizer"
               value={props.form.organizer}
               onChange={props.handleChange}
-              className="mt-1 create-event-inputs"
+              className={`mt-1 create-event-inputs ${
+                props.fieldErrors.organizer ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {props.fieldErrors.organizer && (
+              <p className="text-red-500 text-md mt-1">
+                {props.fieldErrors.organizer}
+              </p>
+            )}
           </div>
         </div>
 
