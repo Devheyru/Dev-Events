@@ -1,18 +1,16 @@
 import { IEvent } from "@/database";
 import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
+import { getBookingCount } from "@/lib/actions/booking.actions";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import BookEvent from "./BookEvent";
 import EventCard from "./EventCard";
-import { cacheLife } from "next/cache";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 if (!BASE_URL) {
   throw new Error("NEXT_PUBLIC_BASE_URL environment variable is not defined");
 }
-
-const bookings = 10;
 
 const EventDetailsItem = ({
   icon,
@@ -49,11 +47,10 @@ const EventTags = ({ tags }: { tags: string[] }) => (
   </div>
 );
 
-const EventDetails = async ({ params }: { params: Promise<string> }) => {
-  "use cache";
-  cacheLife("hours");
-
-  const slug = await params;
+const EventDetails = async ({ params }: { params: Promise<{ slug: string }> | { slug: string } }) => {
+  const { slug } = (await params) as { slug: string };
+  // Fetch the event data for the provided slug. We deliberately rely on
+  // next's fetch revalidation option to cache the response for 60s.
   const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
     next: { revalidate: 60 }, // Add caching strategy
   });
@@ -68,7 +65,7 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
   const { event } = await request.json();
   if (!event) return notFound();
 
-  const bookings = 10;
+  const bookings = await getBookingCount(String(event._id));
   const similarEvents: IEvent[] = (await getSimilarEventsBySlug(
     slug
   )) as unknown as IEvent[];
