@@ -2,17 +2,14 @@ import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
 import { IEvent } from "@/database";
 import { cacheLife } from "next/cache";
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+import { getAllEvents } from "@/lib/actions/event.actions";
 
 const page = async () => {
   "use cache";
   cacheLife("hours");
-  if (!BASE_URL) {
-    throw new Error("NEXT_PUBLIC_BASE_URL is not defined!");
-  }
-  const res = await fetch(`${BASE_URL}/api/events`);
-  const { events } = await res.json();
+  // Fetch events directly from the database on the server to avoid
+  // making an HTTP request to our own API during build/prerender.
+  const events = await getAllEvents();
 
   return (
     <section>
