@@ -170,7 +170,7 @@ export default function CreateEventUI(props: Props) {
               onChange={props.handleChange}
               className="mt-1 create-event-inputs"
             >
-              <option value="offline(inperson)">Offline</option>
+              <option value="offline">Offline</option>
               <option value="online">Online</option>
               <option value="hybrid">Hybrid</option>
             </select>
